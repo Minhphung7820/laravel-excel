@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Import\UserImport;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ExcelController extends Controller
@@ -18,7 +19,10 @@ class ExcelController extends Controller
 
     public function import(Request $request)
     {
-        Excel::import(new UserImport, $request->file('file'));
+
+        $fileContents = storage_path('app/excel/import.xlsx');
+
+        Excel::import(new UserImport, $fileContents);
         echo "Đã import";
     }
 }

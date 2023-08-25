@@ -2,24 +2,22 @@
 
 namespace App\Import;
 
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Concerns\ToModel;
+use App\Import\FirstSheetImport;
+use App\Models\Employee;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithConditionalSheets;
 
-class UserImport implements ToModel
+class UserImport implements WithMultipleSheets
 {
-    /**
-     * @param array $row
-     *
-     * @return User|null
-     */
-    public function model(array $row)
+    // use WithConditionalSheets;
+
+    public function sheets(): array
     {
-        return new User([
-            'name'     => $row[1],
-            'email'    => $row[2],
-            'password' => Hash::make(123),
-        ]);
+        return [
+            'job_titles' => new FirstSheetImport(),
+            'departments' => new SecondSheetImport(),
+            'positions' => new ThirdSheetImport(),
+            'employees' => new EmployeeImport(),
+        ];
     }
 }
